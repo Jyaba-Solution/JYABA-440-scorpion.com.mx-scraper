@@ -1,0 +1,1 @@
+scrapy crawl scorpion -o lechara.json
