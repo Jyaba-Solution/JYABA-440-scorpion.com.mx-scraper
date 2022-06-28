@@ -58,7 +58,8 @@ class ScorpionSpider(scrapy.Spider):
                     'Store Name': '',
                     'Store Address': '',
                     'Stock': '',
-                    'UPC WM': sku.zfill(16)
+                    'UPC WM': sku.zfill(16),
+                    'Final Price': '',
                     }
         for price_box in price_boxes:
             model = price_box.xpath('.//label/h4/text()').extract_first()
@@ -74,6 +75,7 @@ class ScorpionSpider(scrapy.Spider):
                 default_dict_copy['Modelo'] = model
                 default_dict_copy['Price'] = self.filter_price(price)
                 default_dict_copy['Sale Price'] = self.filter_price(old_price)
+                default_dict_copy['Final Price'] = min(default_dict_copy['Price'], default_dict_copy['Sale Price']) if default_dict_copy['Sale Price'] else default_dict_copy['Price']
                 yield default_dict_copy
             if remainig_models:
                 models = price_box.xpath('.//h4//sub/text()').extract()
@@ -85,4 +87,6 @@ class ScorpionSpider(scrapy.Spider):
                     default_dict_copy['Sales Flag'] = sale_flag
                     default_dict_copy['Price'] = self.filter_price(default_old_price) if default_old_price else self.filter_price(default_price)
                     default_dict_copy['Sale Price'] = self.filter_price(sale_price)
+                    default_dict_copy['Final Price'] = min(default_dict_copy['Price'], default_dict_copy['Sale Price']) if default_dict_copy['Sale Price'] else default_dict_copy['Price']
+                    yield default_dict_copy
                     yield default_dict_copy
