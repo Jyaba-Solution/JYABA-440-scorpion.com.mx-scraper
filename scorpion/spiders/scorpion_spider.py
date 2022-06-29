@@ -89,4 +89,3 @@ class ScorpionSpider(scrapy.Spider):
                     default_dict_copy['Sale Price'] = self.filter_price(sale_price)
                     default_dict_copy['Final Price'] = min(default_dict_copy['Price'], default_dict_copy['Sale Price']) if default_dict_copy['Sale Price'] else default_dict_copy['Price']
                     yield default_dict_copy
-                    yield default_dict_copy
